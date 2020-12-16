@@ -42,10 +42,11 @@ for line in io.lines() do
     end
 end
 
-local notinrange = {}
-local inrange = {}
 
 function checkInRange(tickets)
+    local notinrange = {}
+    local inrange = {}
+
     local sum = 0
     for _, ticket in ipairs(tickets) do
         for _, num in ipairs(ticket) do
