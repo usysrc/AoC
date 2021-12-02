@@ -43,17 +43,19 @@ func readFile() []mov {
 
 func main() {
 	data := readFile()
+	aim := 0
 	horizontal := 0
 	vertical := 0
 	for _, v := range data {
 		if v.command == "up" {
-			vertical -= v.amount
+			aim -= v.amount
 		}
 		if v.command == "down" {
-			vertical += v.amount
+			aim += v.amount
 		}
 		if v.command == "forward" {
 			horizontal += v.amount
+			vertical += v.amount * aim
 		}
 	}
 	fmt.Println(horizontal * vertical)
