@@ -8,8 +8,6 @@ import (
 	"strings"
 )
 
-const BOARDWIDTH = 5
-const BOARDHEIGHT = 5
 const FILE = "input.txt"
 
 type GetError struct{}
