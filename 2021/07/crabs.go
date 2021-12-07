@@ -3,12 +3,12 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 )
 
 const FILE = "input.txt"
-const cycles = 256
 
 func readFile() []int {
 	inputFile, err := os.Open(FILE)
@@ -38,34 +38,15 @@ func readFile() []int {
 
 func main() {
 	data := readFile()
-	counts := make(map[int]int, 0)
-
-	for i := 0; i < 9; i++ {
-		counts[i] = 0
-	}
-
+	min := 1000000
 	for _, v := range data {
-		counts[v]++
-	}
-	for i := 0; i < cycles; i++ {
-		newcounts := make(map[int]int, 0)
-		for j := 0; j < 9; j++ {
-			newcounts[j] = 0
+		sum := 0
+		for _, vv := range data {
+			sum += int(math.Abs(float64(vv - v)))
 		}
-
-		if counts[0] > 0 {
-			newcounts[8] = counts[0]
-			newcounts[6] = counts[0]
-			counts[0] = 0
+		if sum < min {
+			min = sum
 		}
-		for j := 1; j < 9; j++ {
-			newcounts[j-1] += counts[j]
-		}
-		counts = newcounts
 	}
-	sum := 0
-	for j := 0; j < 9; j++ {
-		sum += counts[j]
-	}
-	fmt.Println(sum)
+	fmt.Println(min)
 }
