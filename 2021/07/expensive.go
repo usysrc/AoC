@@ -36,7 +36,18 @@ func readFile() []int {
 	return data
 }
 
+var sums map[int]int
+
+// gauss with memoization
+func getSum(n int) int {
+	if _, ok := sums[n]; !ok {
+		sums[n] = n * (n + 1) / 2
+	}
+	return sums[n]
+}
+
 func main() {
+	sums = make(map[int]int, 0)
 	data := readFile()
 	min := 100000000
 
@@ -51,12 +62,11 @@ func main() {
 		sum := 0
 		for _, vv := range data {
 			n := int(math.Abs(float64(vv - i)))
-			p := 0
-			for k := 0; k < n+1; k++ {
-				p += k
-			}
+			p := getSum(n)
 			sum += p
-
+			if sum >= min {
+				continue
+			}
 		}
 		if sum < min {
 			min = sum
