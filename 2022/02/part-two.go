@@ -44,13 +44,11 @@ func points(shape Shape) int {
 }
 
 // returns a beats b for values of a and b
-func beats(a, b Shape) func(l, r Shape) bool {
-	return func(l, r Shape) bool {
-		if r == a && l == b {
-			return true
-		}
-		return false
+func beats(a, b, l, r Shape) bool {
+	if r == a && l == b {
+		return true
 	}
+	return false
 }
 
 // calculate the points for the outcome (win, draw or loss)
@@ -58,7 +56,7 @@ func win(l, r Shape) int {
 	if l == r {
 		return 3
 	}
-	if beats(Rock, Scissors)(l, r) || beats(Scissors, Paper)(l, r) || beats(Paper, Rock)(l, r) {
+	if beats(Rock, Scissors, l, r) || beats(Scissors, Paper, l, r) || beats(Paper, Rock, l, r) {
 		return 6
 	}
 	return 0
