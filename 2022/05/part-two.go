@@ -67,11 +67,6 @@ func readFile() string {
 		} else if !header && line != "" {
 			quantity, from, to := parseMove(line)
 			fmt.Println(quantity, from, to)
-			// for i := 0; i < quantity; i++ {
-			// 	fmt.Println(stacks[from-1][len(stacks[from-1])-1])
-			// 	stacks[to-1] = append(stacks[to-1], stacks[from-1][len(stacks[from-1])-1])
-			// 	stacks[from-1] = stacks[from-1][:len(stacks[from-1])-1]
-			// }
 			for i := len(stacks[from-1]) - quantity; i < len(stacks[from-1]); i++ {
 				stacks[to-1] = append(stacks[to-1], stacks[from-1][i])
 			}
