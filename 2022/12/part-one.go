@@ -36,10 +36,6 @@ func (g Grid) set(i, j int, v int) {
 	g.field[strconv.Itoa(i)+","+strconv.Itoa(j)] = v
 }
 
-func (g Grid) del(i, j int) {
-	delete(g.field, strconv.Itoa(i)+","+strconv.Itoa(j))
-}
-
 // returns all left, right, up, down neighbours (if existing, they don't exist on borders)
 func (g Grid) getNeighbours(i, j int) []Point {
 	neighbours := []Point{}
