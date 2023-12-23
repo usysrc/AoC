@@ -27,7 +27,6 @@ func main() {
 				r = i
 			}
 		}
-		// fmt.Println(10*l + r)
 		if r >= 0 && l >= 0 {
 			sum += 10*l + r
 		}
