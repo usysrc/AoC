@@ -1,5 +1,5 @@
 # AoC
-My Advent of Code 🎅 entries
+Some Advent of Code 🎅 entries
 
 https://adventofcode.com/
 
