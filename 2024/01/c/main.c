@@ -26,14 +26,14 @@ int main() {
     qsort(right, rows, sizeof(int), compare);
 
     // sum the two arrays
-    int sumA = 0;
+    long sumA = 0;
     for (int i = 0; i < rows; i++) {
         // calculate the abs distance of left[i] and right[i]
         int distance = abs(left[i]-right[i]);
         sumA += distance;
     }
 
-    printf("Sum A: %d\n", sumA);
+    printf("Sum A: %ld\n", sumA);
 
 
     // count the number of occurences in the right array
