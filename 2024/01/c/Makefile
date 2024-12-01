@@ -2,9 +2,11 @@
 
 ALL: build run
 
-build: main.c
-	gcc -o main main.c
+build: main
+
+main: main.c
+	@echo "Building main.c"
+	gcc -O3 -o main main.c
 
 run: build
 	./main
-	
