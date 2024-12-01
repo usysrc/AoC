@@ -46,7 +46,7 @@ func main() {
 	}
 	fmt.Println("Answer A", sumA)
 
-	// count occurneces of each number in right
+	// count occurences of each number in right
 	counts := make(map[int]int)
 	for _, v := range right {
 		counts[v]++
