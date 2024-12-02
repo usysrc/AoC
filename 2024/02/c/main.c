@@ -6,7 +6,7 @@
 #define MAX_REPORTS 10000
 #define MAX_LEVELS 100
 
-bool isReportSafe(int report[], int levelsCount)
+bool isReportSafeA(int report[], int levelsCount)
 {
     if (levelsCount < 2)
     {
@@ -43,13 +43,33 @@ bool isReportSafe(int report[], int levelsCount)
         }
         last = v;
     }
-    // print the report
+    return true;
+}
+
+bool isReportSafeB(int report[], int levelsCount) 
+{
+    if (isReportSafeA(report, levelsCount))
+    {
+        return true;
+    }
     for (int i = 0; i < levelsCount; i++)
     {
-        printf("%d ", report[i]);
-    }
-    printf("\n");
-    return true;
+        int values[levelsCount-1];
+        int k = 0;
+        for (int j=0; j<levelsCount; j++)
+        {
+            if (j != i)
+            {
+                values[k] = report[j];
+                k++;       
+            }
+        }
+        if (isReportSafeA(values, levelsCount-1))
+        {
+            return true;
+        }
+    } 
+    return false;
 }
 
 int main()
@@ -64,11 +84,11 @@ int main()
 
     int report[MAX_REPORTS][MAX_LEVELS];
     int levelsCount[MAX_REPORTS];
-    
+
     int line[MAX_LEVELS];
     int reportsCount = 0;
     // parse the input file into report, we don't know how many levels are in a report
-    while(!feof(input))
+    while (!feof(input))
     {
         int i = 0;
         do
@@ -89,18 +109,28 @@ int main()
             return 1;
         }
     }
-    int sumA = 0;
 
+    int sumA = 0;
     for (int i = 0; i < reportsCount; i++)
     {
         // check if the report is safe
-        if (isReportSafe(report[i], levelsCount[i]))
+        if (isReportSafeA(report[i], levelsCount[i]))
         {
             sumA++;
         }
     }
-
     printf("SumA: %d\n", sumA);
+
+    int sumB = 0;
+    for (int i = 0; i < reportsCount; i++)
+    {
+        // check if the report is safe
+        if (isReportSafeB(report[i], levelsCount[i]))
+        {
+            sumB++;
+        }
+    }
+    printf("SumB: %d\n", sumB);
 
     // close the input file
     fclose(input);
