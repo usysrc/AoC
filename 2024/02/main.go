@@ -42,7 +42,6 @@ func main() {
 	sumB := 0
 	for _, line := range lines {
 		if isLevelSafeB(line) {
-			fmt.Println(line)
 			sumB++
 		}
 	}
@@ -80,10 +79,7 @@ func isLevelSafeA(intValues []int) bool {
 		}
 		last = v
 	}
-	if safe {
-		return true
-	}
-	return false
+	return safe
 }
 
 // if intValues is unsafe try to remove one value and check if it is safe
@@ -91,7 +87,7 @@ func isLevelSafeB(intValues []int) bool {
 	if isLevelSafeA(intValues) {
 		return true
 	}
-	fmt.Println("unsafe ", intValues)
+	// fmt.Println("unsafe ", intValues)
 	for i := 0; i < len(intValues); i++ {
 		// create a new slice without the value at index i
 		values := make([]int, 0)
@@ -101,9 +97,9 @@ func isLevelSafeB(intValues []int) bool {
 			}
 		}
 
-		fmt.Println("testing ", values)
+		// fmt.Println("testing ", values)
 		if isLevelSafeA(values) {
-			fmt.Println("safe! ", values)
+			// fmt.Println("safe! ", values)
 			return true
 		}
 	}
