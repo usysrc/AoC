@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 # if argument --delete is passed, then remove the files
 if [ "$1" = "--delete" ]; then
     find . -name input -exec git rm {} \;
