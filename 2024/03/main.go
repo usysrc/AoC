@@ -16,26 +16,60 @@ func atoi(str string) int {
 	return i
 }
 
-func main() {
+func openFile() *os.File {
 	// read the file 'input'
 	file, err := os.Open("input")
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(err)
 	}
+	return file
+}
+
+func main() {
+	partA()
+	partB()
+}
+
+func partB() {
+	file := openFile()
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
-
-	re := regexp.MustCompile(`mul\((\d+),(\d+)\)`)
-	result := 0
-	for scanner.Scan() {
-		line := scanner.Text()
-		matches := re.FindAllStringSubmatch(line, -1)
+	scannerB := bufio.NewScanner(file)
+	resultB := 0
+	do := true
+	mulRe := regexp.MustCompile(`mul\((\d+),(\d+)\)|do\(\)|don't\(\)`)
+	for scannerB.Scan() {
+		line := scannerB.Text()
+		matches := mulRe.FindAllStringSubmatch(line, -1)
 		for _, match := range matches {
-			result += atoi(match[1]) * atoi(match[2])
+			if match[0] == "do()" {
+				do = true
+			} else if match[0] == "don't()" {
+				do = false
+			} else {
+				if do {
+					resultB += atoi(match[1]) * atoi(match[2])
+				}
+			}
 		}
 	}
-	fmt.Println(result)
+	fmt.Println(resultB)
+}
 
+func partA() {
+	file := openFile()
+	defer file.Close()
+
+	scannerA := bufio.NewScanner(file)
+
+	mulRe := regexp.MustCompile(`mul\((\d+),(\d+)\)`)
+	resultA := 0
+	for scannerA.Scan() {
+		line := scannerA.Text()
+		matches := mulRe.FindAllStringSubmatch(line, -1)
+		for _, match := range matches {
+			resultA += atoi(match[1]) * atoi(match[2])
+		}
+	}
+	fmt.Println(resultA)
 }
