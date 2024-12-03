@@ -16,7 +16,6 @@ func main() {
 	}
 	defer file.Close()
 
-	// Read the file line by line and parse the integers
 	lines := make([][]int, 0)
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -87,9 +86,7 @@ func isLevelSafeB(intValues []int) bool {
 	if isLevelSafeA(intValues) {
 		return true
 	}
-	// fmt.Println("unsafe ", intValues)
 	for i := 0; i < len(intValues); i++ {
-		// create a new slice without the value at index i
 		values := make([]int, 0)
 		for j := 0; j < len(intValues); j++ {
 			if j != i {
@@ -97,9 +94,7 @@ func isLevelSafeB(intValues []int) bool {
 			}
 		}
 
-		// fmt.Println("testing ", values)
 		if isLevelSafeA(values) {
-			// fmt.Println("safe! ", values)
 			return true
 		}
 	}
