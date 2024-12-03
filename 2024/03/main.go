@@ -8,6 +8,14 @@ import (
 	"strconv"
 )
 
+func atoi(str string) int {
+	i, err := strconv.Atoi(str)
+	if err != nil {
+		panic(err)
+	}
+	return i
+}
+
 func main() {
 	// read the file 'input'
 	file, err := os.Open("input")
@@ -25,15 +33,7 @@ func main() {
 		line := scanner.Text()
 		matches := re.FindAllStringSubmatch(line, -1)
 		for _, match := range matches {
-			a, err := strconv.Atoi(match[1])
-			if err != nil {
-				panic(err)
-			}
-			b, err := strconv.Atoi(match[2])
-			if err != nil {
-				panic(err)
-			}
-			result += a * b
+			result += atoi(match[1]) * atoi(match[2])
 		}
 	}
 	fmt.Println(result)
