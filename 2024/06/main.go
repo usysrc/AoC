@@ -103,45 +103,17 @@ func main() {
 
 	// find positions for new obstacles on the map that would create loops for the guard
 	loopCount := 0
-	ox, oy := start.x, start.y
-	dir := "up"
-	for {
-		tx, ty := ox, oy
-		if dir == "up" {
-			ty--
-		} else if dir == "down" {
-			ty++
-		} else if dir == "left" {
-			tx--
-		} else if dir == "right" {
-			tx++
-		}
-		if ty < 0 || ty >= mh || tx < 0 || tx >= mw {
-			break
-		}
-
-		// change direction
-		if floorMap[Pos{tx, ty}] == "#" {
-			if dir == "up" {
-				dir = "right"
-			} else if dir == "down" {
-				dir = "left"
-			} else if dir == "left" {
-				dir = "up"
-			} else if dir == "right" {
-				dir = "down"
-			}
-			continue
-		}
-
+	dir := Direction("up")
+	for pos, _ := range visited {
+		tx, ty := pos.x, pos.y
 		changed := false
 		if floorMap[Pos{tx, ty}] == "." {
 			floorMap[Pos{tx, ty}] = "#"
 			changed = true
 		}
 		// simulate movement until guard leaves the floor or lands in a loop, mark visited spaces
-		guard.x, guard.y = ox, oy
-		guard.dir = Direction(dir)
+		guard.x, guard.y = start.x, start.y
+		guard.dir = Direction("up")
 		visitedLoop := map[Pos]Direction{}
 		visitedLoop[Pos{guard.x, guard.y}] = guard.dir
 		for {
@@ -191,8 +163,20 @@ func main() {
 		if changed {
 			floorMap[Pos{tx, ty}] = "."
 		}
-		// move to next position
-		ox, oy = tx, ty
+
+		// change direction
+		if floorMap[Pos{tx, ty}] == "#" {
+			if dir == "up" {
+				dir = "right"
+			} else if dir == "down" {
+				dir = "left"
+			} else if dir == "left" {
+				dir = "up"
+			} else if dir == "right" {
+				dir = "down"
+			}
+			continue
+		}
 	}
 
 	// draw the floor and the visited spaces
