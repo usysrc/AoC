@@ -44,11 +44,17 @@ func main() {
 			left := strings.TrimSpace(str[0])
 			right := strings.TrimSpace(str[1])
 			var leftInt int
-			fmt.Sscanf(left, "%d", &leftInt)
+			_, err := fmt.Sscanf(left, "%d", &leftInt)
+			if err != nil {
+				panic(err)
+			}
 			rightSlice := strings.Split(right, " ")
 			rightIntSlice := make([]int, len(rightSlice))
 			for i, v := range rightSlice {
-				fmt.Sscanf(v, "%d", &rightIntSlice[i])
+				_, err := fmt.Sscanf(v, "%d", &rightIntSlice[i])
+				if err != nil {
+					panic(err)
+				}
 			}
 
 			// Part A
