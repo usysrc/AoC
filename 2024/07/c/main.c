@@ -27,6 +27,7 @@ bool calcA(long current, long i, long right[], int right_size, long left)
     return false;
 }
 
+// concatenate two numbers together, example: concat(12, 34) = 1234
 long concat(long a, long b)
 {
     long c = b;
