@@ -37,6 +37,7 @@ func main() {
 	sumB = 0
 
 	for scanner.Scan() {
+		// lines have the form "result: a b c d ..."
 		line := scanner.Text()
 		str := strings.Split(line, ":")
 		if len(str) == 2 {
@@ -45,7 +46,6 @@ func main() {
 			var leftInt int
 			fmt.Sscanf(left, "%d", &leftInt)
 			rightSlice := strings.Split(right, " ")
-			// convert rightSlice to []int
 			rightIntSlice := make([]int, len(rightSlice))
 			for i, v := range rightSlice {
 				fmt.Sscanf(v, "%d", &rightIntSlice[i])
