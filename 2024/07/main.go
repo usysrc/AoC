@@ -78,6 +78,9 @@ func main() {
 			// Part B
 			var calcB func(int64, int64) bool
 			calcB = func(i int64, current int64) bool {
+				if current > int64(leftInt) {
+					return false
+				}
 				if i >= int64(len(rightIntSlice)) {
 					return current == int64(leftInt)
 				}
