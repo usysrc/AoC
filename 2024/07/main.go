@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
+// Concatenate a and b using arithmetic operations
 func concatenate(a, b int64) int64 {
-	// Concatenate r and current using arithmetic operations
 	temp := b
 
-	// Handle the case when current is 0
+	// Handle the case when b is 0
 	if temp == 0 {
 		a *= 10
 	} else {
