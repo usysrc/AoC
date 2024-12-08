@@ -15,6 +15,14 @@ type Map struct {
 	width, height int
 }
 
+func (m Map) copy() Map {
+	newMap := Map{data: make(map[Pos]string), width: m.width, height: m.height}
+	for k, v := range m.data {
+		newMap.data[k] = v
+	}
+	return newMap
+}
+
 func PartA(karte Map, antennas map[string][]Pos) {
 	count := 0
 	for _, antenna := range antennas {
@@ -124,16 +132,10 @@ func main() {
 	}
 	karte.width++
 
-	karteA := Map{data: make(map[Pos]string), width: karte.width, height: karte.height}
-	for k, v := range karte.data {
-		karteA.data[k] = v
-	}
+	karteA := karte.copy()
 	PartA(karteA, antennas)
 
-	karteB := Map{data: make(map[Pos]string), width: karte.width, height: karte.height}
-	for k, v := range karte.data {
-		karteB.data[k] = v
-	}
+	karteB := karte.copy()
 	PartB(karteB, antennas)
 
 }
