@@ -67,8 +67,6 @@ func calcB(arr []string) {
 			}
 			count++
 		}
-
-		fmt.Println(" Val: ", val, "Count: ", count)
 		// try to find a . space big enought to fit in count
 		for n := 0; n < k; n++ {
 			if arr[n] != "." {
@@ -82,7 +80,6 @@ func calcB(arr []string) {
 				}
 			}
 			if found {
-				fmt.Println("found a space at: ", n, " for ", count)
 				// move the items
 				for i := 0; i < count && n+i < len(arr); i++ {
 					arr[n+i] = val
