@@ -64,6 +64,7 @@ func main() {
 		cache[CacheKey{stone, i}] = count
 		return count
 	}
+	// Part 1
 	stonesA := int64(0)
 	line := strings.Split(stonerow, " ")
 	for i := 0; i < len(line); i++ {
