@@ -15,6 +15,9 @@ func main() {
 	}
 	defer file.Close()
 
+	fmt.Println("Day 10: Plutonian Pebbles")
+	fmt.Println("Using file: ", os.Args[1])
+
 	stonerow := ""
 	// Read the file
 	scanner := bufio.NewScanner(file)
