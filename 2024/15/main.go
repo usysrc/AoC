@@ -120,7 +120,6 @@ func partA() {
 		}
 
 	}
-	printMap(height, width, warehouse, robot)
 	fmt.Println(width, height)
 
 	sumA := 0
@@ -207,98 +206,124 @@ func partB() {
 			continue
 		}
 		// check if there is a crate at the next position
-		if isCrate(warehouse[Pos{robot.x + dx, robot.y + dy}].name) {
+		_, found := boxes[Pos{robot.x + dx, robot.y + dy}]
+		if found {
 
 			// move the crate and all the crates behind it
+			moved := map[Pos]bool{}
+			moves := []func(){}
 			var moveBox func(Pos) bool
 			moveBox = func(p Pos) bool {
-				nextPosA := Pos{p.x + dx, p.y + dy}
-				nextPosB := Pos{p.x + dx + 1, p.y + dy}
-
-				if warehouse[nextPosA].name == WALL || warehouse[nextPosB].name == WALL {
+				if moved[p] {
+					return true
+				}
+				crateA, foundA := boxes[Pos{p.x + dx, p.y + dy}]
+				crateB, foundB := boxes[Pos{p.x + dx + 1, p.y + dy}]
+				if warehouse[Pos{p.x + dx, p.y + dy}].name == WALL {
 					return false
 				}
-				if isCrate(warehouse[nextPosA].name) || isCrate(warehouse[nextPosB].name) {
-					blockingBoxA, foundA := boxes[nextPosA]
-					blockingBoxB, foundB := boxes[nextPosB]
+				if warehouse[Pos{p.x + dx + 1, p.y + dy}].name == WALL {
+					return false
+				}
+				if foundA && crateA.Pos != p {
 
-					if foundA && !moveBox(blockingBoxA.Pos) {
-						return false
-					}
-					if foundB && !moveBox(blockingBoxB.Pos) {
-						return false
-					}
-
-					// re-check if the next position is a wall
-					if warehouse[nextPosA].name == WALL || warehouse[nextPosB].name == WALL {
-						return false
-					}
-					if isCrate(warehouse[nextPosA].name) || isCrate(warehouse[nextPosB].name) {
+					if !moveBox(crateA.Pos) {
 						return false
 					}
 				}
-				// move the box now that we know it is safe
-				currentTileA := warehouse[p]
-				currentTileB := warehouse[Pos{p.x + 1, p.y}]
-				warehouse[p] = Tile{p, SPACE}
-				warehouse[Pos{p.x + 1, p.y}] = Tile{Pos{p.x + 1, p.y}, SPACE}
+				if foundB && crateB.Pos != p {
 
-				warehouse[nextPosA] = Tile{nextPosA, currentTileA.name}
-				warehouse[nextPosB] = Tile{nextPosB, currentTileB.name}
+					if !moveBox(crateB.Pos) {
+						return false
+					}
+				}
+				if warehouse[Pos{p.x + dx, p.y + dy}].name == WALL {
+					return false
+				}
+				if warehouse[Pos{p.x + dx + 1, p.y + dy}].name == WALL {
+					return false
+				}
+				// move the box
+				moves = append(moves, func() {
+					delete(boxes, Pos{p.x, p.y})
+					delete(boxes, Pos{p.x + 1, p.y})
+					box := Tile{Pos{p.x + dx, p.y + dy}, CRATE}
+					boxes[Pos{box.x, box.y}] = box
+					boxes[Pos{box.x + 1, box.y}] = box
 
-				delete(boxes, p)
-				delete(boxes, Pos{p.x + 1, p.y})
-				box := boxes[nextPosA]
-				boxes[nextPosA] = box
-				boxes[nextPosB] = box
+					// leftTile := warehouse[Pos{p.x, p.y}]
+					// rightTile := warehouse[Pos{p.x + 1, p.y}]
+					warehouse[Pos{p.x, p.y}] = Tile{Pos{p.x, p.y}, SPACE}
+					warehouse[Pos{p.x + 1, p.y}] = Tile{Pos{p.x + 1, p.y}, SPACE}
+					warehouse[Pos{box.x, box.y}] = Tile{Pos{box.x, box.y}, CRATELEFT}
+					warehouse[Pos{box.x + 1, box.y}] = Tile{Pos{box.x + 1, box.y}, CRATERIGHT}
+				})
+				moved[p] = true
 				return true
 			}
-			if dy != 0 {
-				box := boxes[Pos{robot.x + dx, robot.y + dy}]
-				moveBox(box.Pos)
-			} else {
-				// move the crate and all the crates behind it
-				var move func(Pos)
-				move = func(p Pos) {
-					nextPos := Pos{p.x + dx, p.y + dy}
-					if warehouse[nextPos].name == WALL {
-						return
-					}
-
-					// check if there is a crate at the next position
-					if isCrate(warehouse[p].name) {
-						move(nextPos)
-					}
-					// store the current tile and move the crate
-					currentTile := warehouse[p]
-					nextTile := warehouse[nextPos]
-					if nextTile.name != SPACE {
-						return
-					}
-					warehouse[p] = Tile{p, SPACE}
-					warehouse[nextPos] = Tile{nextPos, currentTile.name}
+			box := boxes[Pos{robot.x + dx, robot.y + dy}]
+			if moveBox(box.Pos) {
+				for _, m := range moves {
+					m()
 				}
-				move(Pos{robot.x + dx, robot.y + dy})
 			}
 
 		}
-		if warehouse[Pos{robot.x + dx, robot.y + dy}].name == SPACE {
+		_, isABox := boxes[Pos{robot.x + dx, robot.y + dy}]
+		if !isABox {
 			robot.x += dx
 			robot.y += dy
 		}
 		fmt.Println(n)
-		printMap(height, width, warehouse, robot)
+		// wait for input
+		sumBCrateLeft := 0
+		sumBCrateRight := 0
+		// printMap(height, width, warehouse, robot, boxes)
+		for _, v := range warehouse {
+			if v.name == CRATELEFT {
+				sumBCrateLeft += v.y*100 + v.x
+			}
+			if v.name == CRATERIGHT {
+				sumBCrateRight += v.y*100 + (v.x - 1)
+			}
+		}
+		if sumBCrateLeft != sumBCrateRight {
+
+			fmt.Scanln()
+		}
+	}
+	printMap(height, width, warehouse, robot, boxes)
+	sumB := 0
+	visited := map[Pos]bool{}
+	for _, v := range boxes {
+		if vis, ok := visited[v.Pos]; !ok || !vis {
+			sumB += v.y*100 + v.x
+		}
+		visited[v.Pos] = true
+	}
+	sumBCrateLeft := 0
+	sumBCrateRight := 0
+	for _, v := range warehouse {
+		if v.name == CRATELEFT {
+			sumBCrateLeft += v.y*100 + v.x
+		}
+		if v.name == CRATERIGHT {
+			sumBCrateRight += v.y*100 + (v.x - 1)
+		}
 	}
 
+	fmt.Println("Sum of Part B:", sumB, sumBCrateLeft, sumBCrateRight)
 }
 
-func printMap(height int, width int, warehouse map[Pos]Tile, robot Pos) {
+func printMap(height int, width int, warehouse map[Pos]Tile, robot Pos, boxes map[Pos]Tile) {
 	for j := 0; j < height; j++ {
 		for i := 0; i < width; i++ {
 			if robot.x == i && robot.y == j {
 				fmt.Print("@")
+			} else if _, ok := boxes[Pos{i, j}]; ok {
+				fmt.Print("O")
 			} else {
-				fmt.Print(warehouse[Pos{i, j}].name)
+				fmt.Print(".")
 			}
 		}
 		fmt.Println()
