@@ -88,7 +88,7 @@ func main() {
 
 		key := CostKey{current.pos, current.dir}
 		if prevCost, ok := costs[key]; ok {
-			if prevCost <= current.cost {
+			if prevCost < current.cost {
 				continue
 			}
 		}
@@ -160,7 +160,7 @@ func main() {
 		}
 		println()
 	}
-	fmt.Println("Visited tiles:", len(vistedMap))
+	fmt.Println("Visited tiles:", len(vistedMap)+1)
 }
 
 func printMaze(mazeMap map[Pos]Tile, w, h int) {
